@@ -466,6 +466,15 @@ export default class MahjongGame extends State {
 
     private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
+        var synth = window.speechSynthesis;
+        var voices = synth.getVoices();
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = sentence;
+        msg.lang = 'zh-TW';
+        msg.voice = voices[20]; // choose 0 or 20
+        msg.volume = 0.5;
+        msg.rate = 1;
+        synth.speak(msg);
     }
 
     private async Ting(time: number) {
