@@ -50,6 +50,9 @@ export default class MahjongGame extends State {
 
     private score: number[] = [0, 0, 0, 0];
 
+    private synth = window.speechSynthesis;
+    private voices = this.synth.getVoices();
+
     public get effect(): EffectController {
         if (!this.effectController) {
             this.effectController = new EffectController();
@@ -466,15 +469,22 @@ export default class MahjongGame extends State {
 
     private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
-        var synth = window.speechSynthesis;
-        var voices = synth.getVoices();
-        var msg = new SpeechSynthesisUtterance();
-        msg.text = sentence;
-        msg.lang = 'zh-TW';
-        msg.voice = voices[20]; // choose 0 or 20
-        msg.volume = 0.5;
-        msg.rate = 1;
-        synth.speak(msg);
+        var sUsrAg = navigator.userAgent;
+        if (sUsrAg.indexOf("Firefox") > -1) {
+            
+        } else if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) {
+            
+        } else if (sUsrAg.indexOf("Chrome") > -1) {
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = sentence;
+            msg.lang = 'zh-TW';
+            msg.voice = this.voices[0]; // choose 0 or 20
+            msg.volume = 0.5;
+            msg.rate = 1.3;
+            msg.pitch = 0.8 + 0.1 * id;
+            this.synth.speak(msg);
+            msg = null;
+        }
     }
 
     private async Ting(time: number) {
