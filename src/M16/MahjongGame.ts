@@ -103,9 +103,9 @@ export default class MahjongGame extends State {
         this.ui.Input.AddButton(this.commandDialog.pon,  Input.key.command, undefined, Input.key.Pon);
         this.ui.Input.AddButton(this.commandDialog.gon,  Input.key.command, undefined, Input.key.Gon);
         this.ui.Input.AddButton(this.commandDialog.hu,   Input.key.command, undefined, Input.key.Hu);
+        this.ui.Input.AddButton(this.commandDialog.ting, Input.key.command, undefined, Input.key.Ting);
         this.ui.Input.AddButton(this.commandDialog.none, Input.key.command, undefined, Input.key.None);
         this.ui.Input.AddButton(this.commandDialog.eat,  Input.key.command, undefined, Input.key.Eat);
-        this.ui.Input.AddButton(this.ui.tingButton,      Input.key.Ting,    undefined, true);
 
         this.ui.Input.AddButton(this.commandDialog.pongon, Input.key.Gon, undefined, COMMAND_TYPE.COMMAND_PONGON);
         this.ui.Input.AddButton(this.commandDialog.ongon,  Input.key.Gon, undefined, COMMAND_TYPE.COMMAND_ONGON);
@@ -266,6 +266,13 @@ export default class MahjongGame extends State {
                     }
                 }
             });
+            this.socket.emit("getTing", room, (ting: boolean[]) => {
+                if (typeof ting[0] !== "undefined") {
+                    for (let i = 0; i < 4; i++) {
+                        this.infoDialog.tingIcon[this.getID(i)].visible = ting[i];
+                    }
+                }
+            });
         }
 
         this.socket.on("broadcastWindAndRound", (wind: number, round: number) => {
@@ -273,46 +280,14 @@ export default class MahjongGame extends State {
             this.infoDialog.windAndRoundText.text = map[wind] + "風" + map[round];
         });
         this.socket.on("broadcastOpenDoor", (idx: number, dice: number) => {
-            this.remainTile.visible = false;
-            this.infoDialog.Hide();
-            this.door[0].position.set(10.5 * TILE_W, -900, (BOARD_D + TILE_D) / 2);
-            this.door[1].position.set(900, 10.5 * TILE_W, (BOARD_D + TILE_D) / 2);
-            this.door[2].position.set(-10.5 * TILE_W, 900, (BOARD_D + TILE_D) / 2);
-            this.door[3].position.set(-900, -10.5 * TILE_W, (BOARD_D + TILE_D) / 2);
-            this.draw.ClearTileList();
-            this.draw.rotateX(Math.PI * 80 / 180);
-            this.draw.position.set(9 * TILE_W, -900, (BOARD_D + TILE_H) / 2);
-            const map = ["x", "y"];
-            for (let i = 0; i < 4; i++) {
-                this.infoDialog.huIcon[i].visible = false;
-                this.hand[i].ClearTileList();
-                this.door[i].ClearDoor();
-                this.flower[i].ClearTileList();
-                this.sea[i].ClearTileList();
-                this.infoDialog.scoreLog[i].text = "";
-
-                for (let j = 0; j < 16; j++) {
-                    this.hand[i].AddTile("None");
-                }
-
-                (this.hand[i].rotation as any)[map[i % 2]] = Math.PI;
-                this.hand[i].position.z = (BOARD_D + TILE_D) / 2;
-            }
-            this.hand[0].DisableAll();
-            CommonTileList.update();
+            this.InitGame();
 
             this.effect.diceEffect.Play(dice);
-
             this.OpenDoor(idx);
         });
 
-        this.socket.on("broadcastSetSeat", (idx: number) => {
-            this.SetSeat(idx);
-        });
-
-        this.socket.on("broadcastBanker", (id: number, keepWin: number) => {
-            this.SetBanker(id, keepWin);
-        });
+        this.socket.on("broadcastSetSeat", (idx: number) => this.SetSeat(idx));
+        this.socket.on("broadcastBanker", (id: number, keepWin: number) => this.SetBanker(id, keepWin));
 
         this.socket.on("dealTile", (hand: string[]) => {
             this.hand[0].SetImmediate(hand);
@@ -345,7 +320,7 @@ export default class MahjongGame extends State {
         this.socket.on("speak", (id: number, sentence: string) => this.Speak(id, sentence));
         this.socket.on("ting", async (time: number) => this.Ting(time));
         this.socket.on("broadcastTing", (id: number) => {
-            console.log(id);
+            this.infoDialog.tingIcon[this.getID(id)].visible = true;
         });
 
         this.socket.on("robGon", (id: number, tile: string) => {
@@ -369,6 +344,37 @@ export default class MahjongGame extends State {
 
     private getID(id: number) {
         return (4 + id - this.id) % 4;
+    }
+
+    private InitGame() {
+        this.remainTile.visible = false;
+        this.infoDialog.Hide();
+        this.door[0].position.set(10.5 * TILE_W, -900, (BOARD_D + TILE_D) / 2);
+        this.door[1].position.set(900, 10.5 * TILE_W, (BOARD_D + TILE_D) / 2);
+        this.door[2].position.set(-10.5 * TILE_W, 900, (BOARD_D + TILE_D) / 2);
+        this.door[3].position.set(-900, -10.5 * TILE_W, (BOARD_D + TILE_D) / 2);
+        this.draw.ClearTileList();
+        this.draw.rotateX(Math.PI * 80 / 180);
+        this.draw.position.set(9 * TILE_W, -900, (BOARD_D + TILE_H) / 2);
+        const map = ["x", "y"];
+        for (let i = 0; i < 4; i++) {
+            this.infoDialog.huIcon[i].visible = false;
+            this.infoDialog.tingIcon[i].visible = false;
+            this.hand[i].ClearTileList();
+            this.door[i].ClearDoor();
+            this.flower[i].ClearTileList();
+            this.sea[i].ClearTileList();
+            this.infoDialog.scoreLog[i].text = "";
+
+            for (let j = 0; j < 16; j++) {
+                this.hand[i].AddTile("None");
+            }
+
+            (this.hand[i].rotation as any)[map[i % 2]] = Math.PI;
+            this.hand[i].position.z = (BOARD_D + TILE_D) / 2;
+        }
+        this.hand[0].DisableAll();
+        CommonTileList.update();
     }
 
     private OpenDoor(idx: number) {
@@ -467,8 +473,29 @@ export default class MahjongGame extends State {
         CommonTileList.update();
     }
 
+    private async Ting(time: number) {
+        this.commandDialog.Show();
+        this.commandDialog.ting.enable = true;
+
+        this.timer.Play(time);
+        const result = await Promise.race([this.ui.Input.WaitKeyUp(Input.key.Ting), System.DelayValue(time, Input.key.None)]);
+        this.timer.ForceStop();
+
+        this.commandDialog.Hide();
+        this.socket.emit("sendTing", result === Input.key.Ting);
+    }
+
     private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
+        /*var synth = window.speechSynthesis;
+        var voices = synth.getVoices();
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = sentence;
+        msg.lang = 'zh-TW';
+        msg.voice = voices[20]; // choose 0 or 20
+        msg.volume = 0.5;
+        msg.rate = 1;
+        synth.speak(msg);*/
         var sUsrAg = navigator.userAgent;
         if (sUsrAg.indexOf("Firefox") > -1) {
             
@@ -485,14 +512,6 @@ export default class MahjongGame extends State {
             this.synth.speak(msg);
             msg = null;
         }
-    }
-
-    private async Ting(time: number) {
-        this.ui.tingButton.visible = true;
-        this.timer.Play(time);
-        const result = await Promise.race([this.ui.Input.WaitKeyUp(Input.key.Ting), false]);
-        this.timer.ForceStop();
-        this.socket.emit("sendTing", result);
     }
 
     private async Command(tileMap: {[key: number]: string[]}, command: COMMAND_TYPE, time: number) {
@@ -833,7 +852,7 @@ export default class MahjongGame extends State {
             if (gameResult[i].ScoreLog !== undefined) {
                 if (gameResult[i].ScoreLog.Score > 0) {
                     let tileMap = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-                    let tmp = tileMap[Number(gameResult[i].ScoreLog.Tile.charAt(1)) - 1];
+                    let tmp     = tileMap[Number(gameResult[i].ScoreLog.Tile.charAt(1)) - 1];
                     switch (gameResult[i].ScoreLog.Tile.charAt(0)) {
                         case "c":
                             tmp += "萬";
