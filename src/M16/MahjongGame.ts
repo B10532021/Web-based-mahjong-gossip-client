@@ -478,16 +478,17 @@ export default class MahjongGame extends State {
         this.commandDialog.ting.enable = true;
 
         this.timer.Play(time);
-        const result = await Promise.race([this.ui.Input.WaitKeyUp(Input.key.Ting), System.DelayValue(time, Input.key.None)]);
+        const result = await Promise.race([this.ui.Input.WaitKeyUp(Input.key.command), System.DelayValue(time, ButtonKey.None)]);
         this.timer.ForceStop();
 
         this.commandDialog.Hide();
-        this.socket.emit("sendTing", result === Input.key.Ting);
+        console.log(result);
+        this.socket.emit("sendTing", result === ButtonKey.Ting);
     }
 
     private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
-        /*var synth = window.speechSynthesis;
+        var synth = window.speechSynthesis;
         var voices = synth.getVoices();
         var msg = new SpeechSynthesisUtterance();
         msg.text = sentence;
@@ -495,8 +496,8 @@ export default class MahjongGame extends State {
         msg.voice = voices[20]; // choose 0 or 20
         msg.volume = 0.5;
         msg.rate = 1;
-        synth.speak(msg);*/
-        var sUsrAg = navigator.userAgent;
+        synth.speak(msg);
+       /* var sUsrAg = navigator.userAgent;
         if (sUsrAg.indexOf("Firefox") > -1) {
             
         } else if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) {
@@ -511,7 +512,7 @@ export default class MahjongGame extends State {
             msg.pitch = 0.8 + 0.1 * id;
             this.synth.speak(msg);
             msg = null;
-        }
+        }*/
     }
 
     private async Command(tileMap: {[key: number]: string[]}, command: COMMAND_TYPE, time: number) {
