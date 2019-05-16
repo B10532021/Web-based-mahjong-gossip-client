@@ -19,6 +19,7 @@ import Cube from "mahjongh5/ui/Cube";
 import DiceEffect from "./effect/DiceEffect";
 import RoundRetangleGeometry from "mahjongh5/Util/RoundRectangleGeometry";
 import InfoDialog from "./InfoDialog";
+import { type } from "os";
 
 export default function MahjongStart() {
     let isPlaying = false;
@@ -356,6 +357,12 @@ export default function MahjongStart() {
 
             const remainTile = new Text(game, "剩餘張數: ", Assets.font.jhengHei.key, 40, 1, new Three.MeshLambertMaterial({ color: 0x000000 }), -1200, 600, 300);
             remainTile.visible = false;
+
+            const inputTextBox = document.createElement('input');
+            inputTextBox.setAttribute('type', 'text');
+            inputTextBox.setAttribute('name', 'textbox');
+            inputTextBox.setAttribute('style','position: absolute;top: 95%;left: 20%');
+            document.body.appendChild(inputTextBox);
 
             const group = new Three.Group();
             group.rotation.setFromVector3(camera.rotation.toVector3());
