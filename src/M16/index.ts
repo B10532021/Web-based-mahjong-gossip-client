@@ -361,8 +361,24 @@ export default function MahjongStart() {
             const inputTextBox = document.createElement('input');
             inputTextBox.setAttribute('type', 'text');
             inputTextBox.setAttribute('name', 'textbox');
-            inputTextBox.setAttribute('style','position: absolute;top: 95%;left: 20%');
+            inputTextBox.setAttribute('style','position: absolute;top: 96%;left: 82%;font-size: 16px; width:250px;');
+            inputTextBox.setAttribute('placeholder', 'Say something');
+            inputTextBox.setAttribute('onkeydown', 'inputMessage(this)');
             document.body.appendChild(inputTextBox);
+
+            const chatroom = document.createElement('div');
+            chatroom.setAttribute('id', 'chatroom');
+            chatroom.setAttribute('class', 'chatroom');
+            chatroom.setAttribute('style', 'position: absolute; left:1541.7px; top:0px; width:378.3px; height: 900px;background-color:#DDDDDD');
+            document.body.appendChild(chatroom);
+
+            var message = new Array(15);
+            for (var i = 0; i < 15; i++) {
+                message[i] = document.createElement('div');
+                message[i].setAttribute('id', 'mes'+i);
+                message[i].setAttribute('style', 'position: absolute; left:30px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:hidden;line-height:30px;');
+                document.getElementsByClassName("chatroom")[0].appendChild(message[i]);
+            }
 
             const group = new Three.Group();
             group.rotation.setFromVector3(camera.rotation.toVector3());

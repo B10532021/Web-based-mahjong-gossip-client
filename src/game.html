@@ -47,7 +47,7 @@
 		body {
 			margin: 0 auto;
 			background-color: black;
-			text-align: center;
+			/* text-align: center; */
 			height: 100vh;
 			width: 100vw;
 		}
@@ -81,6 +81,27 @@
 		} else if (/iP[ao]d|iPhone/i.test(navigator.userAgent)) {
 			scrollLayer();
 		}
+
+		var currentVis = 0;
+		function inputMessage(ele) {
+        	if(event.key === 'Enter') {
+        		if (currentVis < 15) {
+        			tempMes = document.getElementById('mes'+currentVis);
+	        		tempMes.style.visibility="visible";
+	        		tempMes.innerHTML = "player3: "+ele.value;
+	        		currentVis++;
+	        		ele.value="";
+        		}else {
+        			for (var i = 0; i < 14; i++) {
+        				message[i].innerHTML = message[i+1].innerHTML;
+        			}
+        			tempMes = document.getElementById('mes14');
+	        		tempMes.innerHTML = "player3: "+ele.value;
+	        		ele.value="";
+				}
+				
+        	}
+        }
 	</script>
 </body>
 
