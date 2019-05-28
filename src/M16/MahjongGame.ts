@@ -50,6 +50,8 @@ export default class MahjongGame extends State {
 
     private score: number[] = [0, 0, 0, 0];
 
+    private currentVis = 0;
+
     public get effect(): EffectController {
         if (!this.effectController) {
             this.effectController = new EffectController();
@@ -485,6 +487,18 @@ export default class MahjongGame extends State {
 
     private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
+        if (this.currentVis < 15) {
+            var tempMes = document.getElementById('mes'+this.currentVis);
+            tempMes.style.visibility="visible";
+            tempMes.innerHTML = "player"+id+": "+sentence;
+            this.currentVis++;
+        }else {
+            for (var i = 0; i < 14; i++) {
+                document.getElementById('mes'+i).innerHTML = document.getElementById('mes'+(i+1)).innerHTML;
+            }
+            var tempMes = document.getElementById('mes14');
+            tempMes.innerHTML = "player"+id+": "+sentence;
+        }
         var synth = window.speechSynthesis;
         var voices = synth.getVoices();
         var msg = new SpeechSynthesisUtterance();
