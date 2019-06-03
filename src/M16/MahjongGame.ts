@@ -316,7 +316,7 @@ export default class MahjongGame extends State {
         this.socket.on("command", async (tileMap: {[key: number]: string[]}, command: COMMAND_TYPE, idx: number, time: number) => this.Command(tileMap, command, time));
         this.socket.on("success", (from: number, command: COMMAND_TYPE, tile: string, score: number) => this.Success(from, command, tile, score));
         this.socket.on("broadcastCommand", (from: number, to: number, command: COMMAND_TYPE, tile: string, score: number) => this.BroadcastSuccess(from, to, command, tile, score));
-        this.socket.on("speak", (id: number, name: string, sentence: string) => this.Speak(id, name, sentence));
+        this.socket.on("speak", (id: number, sentence: string) => this.Speak(id, sentence));
         this.socket.on("ting", async (time: number) => this.Ting(time));
         this.socket.on("broadcastTing", (id: number) => {
             this.infoDialog.tingIcon[this.getID(id)].visible = true;
@@ -485,21 +485,19 @@ export default class MahjongGame extends State {
         this.socket.emit("sendTing", result === ButtonKey.Ting);
     }
 
-    private async Speak(id: number, name: string, sentence: string) {
+    private async Speak(id: number, sentence: string) {
         console.log("player%d : %s", id, sentence);
         if (this.currentVis < 15) {
             var tempMes = document.getElementById('mes'+this.currentVis);
             tempMes.style.visibility="visible";
-            // tempMes.innerHTML = "player"+id+": "+sentence;
-            tempMes.innerHTML = name + ": "+sentence;
+            tempMes.innerHTML = "player"+id+": "+sentence;
             this.currentVis++;
         }else {
             for (var i = 0; i < 14; i++) {
                 document.getElementById('mes'+i).innerHTML = document.getElementById('mes'+(i+1)).innerHTML;
             }
             var tempMes = document.getElementById('mes14');
-            //tempMes.innerHTML = "player"+id+": "+sentence;
-            tempMes.innerHTML = name + ": "+sentence;
+            tempMes.innerHTML = "player"+id+": "+sentence;
         }
         var synth = window.speechSynthesis;
         var voices = synth.getVoices();
