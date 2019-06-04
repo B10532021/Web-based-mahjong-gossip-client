@@ -94,7 +94,7 @@
         		if (currentVis < 15) {
         			//tempMes = document.getElementById('mes'+currentVis);
 					//tempMes.style.visibility="visible";
-					socket.emit("manualInputMessage", localStorage.getItem("room"), ele.value , parseInt(localStorage.getItem("ID")));
+					socket.emit("manualInputMessage", localStorage.getItem("room"), ele.value , parseInt(localStorage.getItem("ID")), localStorage.getItem("uuid"));
 	        		//tempMes.innerHTML = "player3: "+ele.value;
 	        		currentVis++;
 	        		ele.value="";
@@ -103,7 +103,7 @@
         			// 	message[i].innerHTML = message[i+1].innerHTML;
         			// }
 					//tempMes = document.getElementById('mes14');
-					socket.emit("manualInputMessage", localStorage.getItem("room"), ele.value , parseInt(localStorage.getItem("ID")));
+					socket.emit("manualInputMessage", localStorage.getItem("room"), ele.value , parseInt(localStorage.getItem("ID")), localStorage.getItem("uuid"));
 	        		//tempMes.innerHTML = "player3: "+ele.value;
 	        		ele.value="";
 				}
