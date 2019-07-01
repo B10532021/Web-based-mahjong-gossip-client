@@ -358,9 +358,9 @@ export default function MahjongStart() {
             const remainTile = new Text(game, "剩餘張數: ", Assets.font.jhengHei.key, 40, 1, new Three.MeshLambertMaterial({ color: 0x000000 }), -1200, 600, 300);
             remainTile.visible = false;
 
-            document.body.setAttribute("text-align","left");
+            document.body.setAttribute("style","text-align:left");
             var getGameInfo = document.getElementById('game');
-            getGameInfo.setAttribute("text-align","left");
+            getGameInfo.setAttribute("style","text-align:left");
             //var player1Tex = new Three.Texture(game.cache[Assets.avatar.player1.key]);
             var player0Tex = new Three.TextureLoader().load('https://i.imgur.com/ZKalvPl.jpg');  // ape
             var player0geometry = new Three.PlaneGeometry(216, 216);
