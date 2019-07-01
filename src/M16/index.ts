@@ -358,6 +358,34 @@ export default function MahjongStart() {
             const remainTile = new Text(game, "剩餘張數: ", Assets.font.jhengHei.key, 40, 1, new Three.MeshLambertMaterial({ color: 0x000000 }), -1200, 600, 300);
             remainTile.visible = false;
 
+            //var player1Tex = new Three.Texture(game.cache[Assets.avatar.player1.key]);
+            var player0Tex = new Three.TextureLoader().load('https://i.imgur.com/ZKalvPl.jpg');  // ape
+            var player0geometry = new Three.PlaneGeometry(216, 216);
+            var player0material = new Three.MeshBasicMaterial({ map: player0Tex });
+            var player0mesh = new Three.Mesh(player0geometry, player0material);
+            player0mesh.position.set(700,-900,850);
+            player0mesh.rotation.set(Math.PI/2,-Math.PI/4,0);
+            player0mesh.visible = true;
+            scene.add(player0mesh);
+
+            var player2Tex = new Three.TextureLoader().load('https://i.imgur.com/DZe2rVH.png');  // avatar
+            var player2geometry = new Three.PlaneGeometry(216, 216);
+            var player2material = new Three.MeshBasicMaterial({ map: player2Tex });
+            var player2mesh = new Three.Mesh(player2geometry, player2material);
+            player2mesh.position.set(-700,-900,850);
+            player2mesh.rotation.set(Math.PI/2,Math.PI/4,0);
+            player2mesh.visible = true;
+            scene.add(player2mesh);
+
+            var player1Tex = new Three.TextureLoader().load('https://i.imgur.com/gvgNRAr.jpg');  // pig
+            var player1geometry = new Three.PlaneGeometry(168, 168);
+            var player1material = new Three.MeshBasicMaterial({ map: player1Tex });
+            var player1mesh = new Three.Mesh(player1geometry, player1material);
+            player1mesh.position.set(0,-300,850);
+            player1mesh.rotation.set(Math.PI/2,0,0);
+            player1mesh.visible = true;
+            scene.add(player1mesh);
+            
             const inputTextBox = document.createElement('input');
             inputTextBox.setAttribute('type', 'text');
             inputTextBox.setAttribute('name', 'textbox');
