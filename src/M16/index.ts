@@ -358,6 +358,9 @@ export default function MahjongStart() {
             const remainTile = new Text(game, "剩餘張數: ", Assets.font.jhengHei.key, 40, 1, new Three.MeshLambertMaterial({ color: 0x000000 }), -1200, 600, 300);
             remainTile.visible = false;
 
+            document.body.setAttribute("text-align","left");
+            var getGameInfo = document.getElementById('game');
+            getGameInfo.setAttribute("text-align","left");
             //var player1Tex = new Three.Texture(game.cache[Assets.avatar.player1.key]);
             var player0Tex = new Three.TextureLoader().load('https://i.imgur.com/ZKalvPl.jpg');  // ape
             var player0geometry = new Three.PlaneGeometry(216, 216);
@@ -389,22 +392,24 @@ export default function MahjongStart() {
             const inputTextBox = document.createElement('input');
             inputTextBox.setAttribute('type', 'text');
             inputTextBox.setAttribute('name', 'textbox');
-            inputTextBox.setAttribute('style','position: absolute;top: 96%;left: 82%;font-size: 16px; width:250px;');
+            inputTextBox.setAttribute('style','position: absolute;top: 96%;left:'+(getGameInfo.offsetWidth+35)+'px;font-size: 16px; width:250px;');
             inputTextBox.setAttribute('placeholder', 'Say something');
             inputTextBox.setAttribute('onkeydown', 'inputMessage(this)');
             document.body.appendChild(inputTextBox);
 
+            var chatroomWidth = document.body.clientWidth-getGameInfo.offsetWidth;
             const chatroom = document.createElement('div');
             chatroom.setAttribute('id', 'chatroom');
             chatroom.setAttribute('class', 'chatroom');
-            chatroom.setAttribute('style', 'position: absolute; left:1541.7px; top:0px; width:378.3px; height: 900px;background-color:#DDDDDD');
+            chatroom.setAttribute('style', 'position: absolute; left:'+getGameInfo.offsetWidth+'px; top:0px; width:'+chatroomWidth+'px; height: '+(getGameInfo.offsetHeight-47)+'px;background-color:#DDDDDD');
             document.body.appendChild(chatroom);
 
             var message = new Array(15);
-            for (var i = 0; i < 15; i++) {
+            var maxMessage = Math.floor((getGameInfo.offsetHeight-77)/60); 
+            for (var i = 0; i < maxMessage; i++) {
                 message[i] = document.createElement('div');
                 message[i].setAttribute('id', 'mes'+i);
-                message[i].setAttribute('style', 'position: absolute; left:30px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:hidden;line-height:30px;');
+                message[i].setAttribute('style', 'position: absolute; left:'+(chatroomWidth-304)/2+'px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:visible;line-height:30px;');
                 document.getElementsByClassName("chatroom")[0].appendChild(message[i]);
             }
 
