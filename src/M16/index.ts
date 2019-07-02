@@ -409,7 +409,7 @@ export default function MahjongStart() {
             for (var i = 0; i < maxMessage; i++) {
                 message[i] = document.createElement('div');
                 message[i].setAttribute('id', 'mes'+i);
-                message[i].setAttribute('style', 'position: absolute; left:'+(chatroomWidth-304)/2+'px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:visible;line-height:30px;');
+                message[i].setAttribute('style', 'position: absolute; left:'+(chatroomWidth-304)/2+'px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:hidden;line-height:30px;');
                 document.getElementsByClassName("chatroom")[0].appendChild(message[i]);
             }
 
