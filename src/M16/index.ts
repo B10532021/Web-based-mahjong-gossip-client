@@ -405,8 +405,9 @@ export default function MahjongStart() {
             document.body.appendChild(chatroom);
 
             var message = new Array(15);
-            var maxMessage = Math.floor((getGameInfo.offsetHeight-77)/60); 
-            for (var i = 0; i < maxMessage; i++) {
+            var maxMessage = Math.floor((getGameInfo.offsetHeight-77)/60);
+            console.log(getGameInfo.offsetHeight, maxMessage);
+            for (var i = 0; i < maxMessage+1; i++) {
                 message[i] = document.createElement('div');
                 message[i].setAttribute('id', 'mes'+i);
                 message[i].setAttribute('style', 'position: absolute; left:'+(chatroomWidth-304)/2+'px; top:'+ (20+60*i) +'px; width:300px; height: 30px; border:2px solid #FFFFBB; background-color:#f1f1f1; visibility:hidden;line-height:30px;');

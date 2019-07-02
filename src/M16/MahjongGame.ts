@@ -486,17 +486,19 @@ export default class MahjongGame extends State {
     }
 
     private async Speak(id: number, sentence: string) {
+        const maxMessage = Math.floor((document.getElementById('game').clientHeight-77)/60);
         console.log("player%d : %s", id, sentence);
-        if (this.currentVis < 15) {
+        console.log(this.currentVis, maxMessage);
+        if (this.currentVis < maxMessage+1) {
             var tempMes = document.getElementById('mes'+this.currentVis);
             tempMes.style.visibility="visible";
             tempMes.innerHTML = "player"+id+": "+sentence;
             this.currentVis++;
         }else {
-            for (var i = 0; i < 14; i++) {
+            for (var i = 0; i < maxMessage; i++) {
                 document.getElementById('mes'+i).innerHTML = document.getElementById('mes'+(i+1)).innerHTML;
             }
-            var tempMes = document.getElementById('mes14');
+            var tempMes = document.getElementById('mes'+maxMessage);
             tempMes.innerHTML = "player"+id+": "+sentence;
         }
         var synth = window.speechSynthesis;

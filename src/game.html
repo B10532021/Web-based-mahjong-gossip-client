@@ -89,9 +89,10 @@
 		});
 
 		var currentVis = 0;
+		const maxMessage = Math.floor((document.getElementById('game').offsetHeight-77)/60);
 		function inputMessage(ele) {
         	if(event.key === 'Enter') {
-        		if (currentVis < 15) {
+        		if (currentVis < maxMessage+1) {
         			//tempMes = document.getElementById('mes'+currentVis);
 					//tempMes.style.visibility="visible";
 					socket.emit("manualInputMessage", localStorage.getItem("room"), ele.value , parseInt(localStorage.getItem("ID")), localStorage.getItem("uuid"));
